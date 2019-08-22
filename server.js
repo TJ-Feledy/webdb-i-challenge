@@ -50,6 +50,21 @@ server.post('/api/accounts/', (req, res) => {
   }
 })
 
+server.put('/api/accounts/:id', (req, res) => {
+  const {id} = req.params
+  const changes = req.body
 
+  db('accounts').where({id}).update(changes)
+    .then(count => {
+      if (count) {
+        res.json(count)
+      }else {
+        res.status(404).json({ message: 'Invalid ID number' })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: `${err}` })
+    })
+})
 
 module.exports = server;
