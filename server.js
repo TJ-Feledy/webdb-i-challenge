@@ -16,6 +16,22 @@ server.get('/api/accounts/', (req, res) => {
     })
 })
 
+server.get('/api/accounts/:id/', (req, res) => {
+  const {id} = req.params
 
+  db('accounts').where({id})
+    .then(accounts => {
+      const account = accounts[0]
+
+      if (account) {
+        res.json(account)
+      }else {
+        res.status(404).json({ message: 'Invalid account id.' })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: `${err}` })
+    })
+})
 
 module.exports = server;
