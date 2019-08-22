@@ -59,7 +59,23 @@ server.put('/api/accounts/:id', (req, res) => {
       if (count) {
         res.json(count)
       }else {
-        res.status(404).json({ message: 'Invalid ID number' })
+        res.status(404).json({ message: 'Invalid account ID' })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: `${err}` })
+    })
+})
+
+server.delete('/api/accounts/:id', (req, res) => {
+  const {id} = req.params
+
+  db('accounts').where({id}).del()
+    .then(count => {
+      if (count) {
+        res.json({ deleted: count })
+      }else {
+        res.status(404).json({ message: 'Invalid account ID' })
       }
     })
     .catch(err => {
