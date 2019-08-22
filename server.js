@@ -34,4 +34,22 @@ server.get('/api/accounts/:id/', (req, res) => {
     })
 })
 
+server.post('/api/accounts/', (req, res) => {
+  const postData = req.body
+
+  if (!postData.name || !postData.budget) {
+    res.status(400).json({ message: 'name and budget fields are required' })
+  }else {
+    db('accounts').insert(postData)
+      .then(id => {
+        res.status(201).json(id)
+      })
+      .catch(err => {
+        res.status(500).json({ errorMessage: `${err}` })
+      })
+  }
+})
+
+
+
 module.exports = server;
